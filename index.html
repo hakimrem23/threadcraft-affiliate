@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0e17">
+  <meta name="description" content="Jana copy Threads dan komen bersambung untuk link Shopee Affiliate, terus dari telefon.">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <title>ThreadCraft • Affiliate Studio</title>
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <div class="site">
+    <header class="topbar">
+      <a class="identity" href="#top" aria-label="ThreadCraft, kembali ke atas">
+        <div class="logo" aria-hidden="true">✳</div>
+        <div><strong>threadcraft<span class="period">.</span></strong><small>THE AFFILIATE STUDIO</small></div>
+      </a>
+      <span class="status"><span class="status-dot"></span> FREE · V1</span>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="eyebrow"><span class="eyebrow-line"></span> UNTUK CONTENT CREATOR</div>
+        <h1>Satu link.<br><em>Banyak cerita.</em></h1>
+        <p>Tukar link Shopee Affiliate kepada post Threads dan komen bersambung. Pilih mood, jana, dan copy–paste.</p>
+        <div class="hero-pills"><span>⚡ Cepat</span><span>✦ 4 gaya penulisan</span><span>◇ Mesra telefon</span></div>
+      </section>
+
+      <div class="workspace">
+        <section class="surface editor" aria-labelledby="form-title">
+          <div class="section-title"><div class="section-number">01</div><div><p class="kicker">INPUT</p><h2 id="form-title">Produk & gaya</h2></div></div>
+          <form id="thread-form" novalidate>
+            <div class="field">
+              <label for="affiliate-link">Link Shopee Affiliate <span class="required">*</span></label>
+              <input id="affiliate-link" name="affiliateLink" type="url" inputmode="url" autocomplete="url" placeholder="https://s.shopee.com.my/..." required>
+              <p class="hint">Link asal kekal dalam komen terakhir. Kami tidak ubah tracking affiliate.</p>
+            </div>
+            <div class="field">
+              <label for="product-name">Nama produk <span class="required">*</span></label>
+              <input id="product-name" name="productName" maxlength="110" placeholder="Contoh: Rak kasut 4 tingkat" required>
+              <p class="hint">Link pendek Shopee tak boleh dibaca automatik dalam versi percuma ini.</p>
+            </div>
+            <div class="field">
+              <label for="features">Kelebihan / fakta produk <span class="optional">Pilihan</span></label>
+              <textarea id="features" name="features" maxlength="400" rows="3" placeholder="Contoh: jimat ruang; mudah dipasang; sesuai untuk rumah kecil"></textarea>
+              <p class="hint">Pisahkan dengan titik koma (;). Tulis ciri yang benar sahaja.</p>
+            </div>
+            <div class="field">
+              <label for="audience">Untuk siapa? <span class="optional">Pilihan</span></label>
+              <input id="audience" name="audience" maxlength="90" placeholder="Contoh: orang duduk rumah sewa">
+            </div>
+
+            <div class="subheading"><span>02</span><h3>Pilih mood post</h3></div>
+            <fieldset class="mood-grid">
+              <legend class="visually-hidden">Mood penulisan</legend>
+              <label class="mood"><input type="radio" name="mood" value="story" checked><span class="mood-ui"><span class="mood-symbol">📖</span><strong>Storytelling</strong><small>Macam cerita</small></span></label>
+              <label class="mood"><input type="radio" name="mood" value="curious"><span class="mood-ui"><span class="mood-symbol">👀</span><strong>Curiosity</strong><small>Buat orang curious</small></span></label>
+              <label class="mood"><input type="radio" name="mood" value="hook"><span class="mood-ui"><span class="mood-symbol">⚡</span><strong>Strong Hook</strong><small>Terus tarik minat</small></span></label>
+              <label class="mood"><input type="radio" name="mood" value="soft"><span class="mood-ui"><span class="mood-symbol">🌿</span><strong>Soft Sell</strong><small>Natural & santai</small></span></label>
+            </fieldset>
+
+            <div class="two-col">
+              <div class="field">
+                <label for="comment-count">Komen bersambung</label>
+                <select id="comment-count" name="commentCount"><option value="1">1 komen</option><option value="2">2 komen</option><option value="3" selected>3 komen</option><option value="4">4 komen</option></select>
+              </div>
+              <div class="field">
+                <label for="tone">Tone bahasa</label>
+                <select id="tone" name="tone"><option value="casual">Santai</option><option value="direct">Direct</option><option value="polished">Kemas</option></select>
+              </div>
+            </div>
+            <label class="checkbox-row"><input id="disclose" type="checkbox" checked><span>Letak disclosure affiliate dekat komen link</span></label>
+            <div id="error" class="error" role="alert" hidden></div>
+            <button id="generate" class="generate-button" type="submit"><span>✦ Jana bebenang</span><span aria-hidden="true">↗</span></button>
+            <p class="below-button">Tanpa langganan API · Tak perlu login · Hasil berdasarkan fakta yang kau isi</p>
+          </form>
+        </section>
+
+        <section class="surface preview" aria-labelledby="preview-title">
+          <div class="section-title"><div class="section-number">03</div><div><p class="kicker">OUTPUT</p><h2 id="preview-title">Preview bebenang</h2></div><div class="preview-badge" id="preview-badge">BELUM SIAP</div></div>
+          <div id="empty" class="empty">
+            <div class="empty-graphic"><div class="chat-shape">✦</div><div class="chat-line one"></div><div class="chat-line two"></div><div class="chat-line three"></div></div>
+            <h3>Idea kau bermula di sini.</h3>
+            <p>Masukkan produk, pilih mood dan tekan jana. Post utama dan komen akan muncul, sedia untuk copy.</p>
+          </div>
+          <div id="output" hidden>
+            <div class="result-toolbar"><div><strong id="result-mood">Storytelling</strong><p id="result-count">1 post · 3 komen</p></div><button type="button" id="copy-all" class="outline-button">⧉ Copy semua</button></div>
+            <div id="cards" class="thread-cards" aria-live="polite"></div>
+            <div class="action-row"><button type="button" class="regenerate-button" id="regenerate">↻ Jana versi lain</button><button type="button" class="ghost-button" id="new-post">＋ Post baru</button></div>
+            <p class="safety-note">Semak fakta & syarat platform sebelum post. Jangan dakwa telah guna produk jika belum. Pendedahan affiliate digalakkan.</p>
+          </div>
+        </section>
+      </div>
+
+      <section class="history surface" aria-labelledby="history-title">
+        <div class="history-heading"><div><p class="kicker">SIMPAN AUTOMATIK DI TELEFON</p><h2 id="history-title">Sejarah post</h2></div><button id="clear-history" class="text-button" type="button" hidden>Padam semua</button></div>
+        <div id="history-list"><p class="history-empty">Belum ada post dijana.</p></div>
+      </section>
+      <footer><span>✳ ThreadCraft</span><span>Made for creators, not fabricated claims.</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js" defer></script>
+</body>
+</html>
