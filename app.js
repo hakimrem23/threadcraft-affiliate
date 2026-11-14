@@ -473,6 +473,15 @@
   form.addEventListener('input', saveDraft);
   form.addEventListener('change', () => { syncStoryFields(); saveDraft(); });
   $('import-product').addEventListener('click', () => importCard($('product-card-input').value));
+  // A full card pasted from ChatGPT is imported immediately; no extra tap needed.
+  $('product-card-input').addEventListener('input', () => {
+    const cardText = $('product-card-input').value.trim();
+    const hasStart = cardText.startsWith('THREADCRAFT-PRODUCT-V1') ||
+      /^\x60{3}(?:text|plaintext)?\s*\nTHREADCRAFT-PRODUCT-V1/.test(cardText);
+    if (hasStart && /END-THREADCRAFT-PRODUCT(?:\s*\x60{3})?\s*$/.test(cardText)) {
+      importCard(cardText);
+    }
+  });
   $('import-clipboard').addEventListener('click', async () => {
     try {
       if(!navigator.clipboard || !navigator.clipboard.readText) throw new Error('Tak boleh baca clipboard pada browser ni. Paste manual dalam ruangan kad kemudian tekan Import teks.');
