@@ -2,12 +2,14 @@
 
 Mobile-first web app untuk menjana post Threads dan komen bersambung daripada **link Shopee Affiliate**.
 
-## Status: V2 — Narrative-first (percuma, tanpa API)
+## Status: V3 — Product relevance safeguards (percuma, tanpa API)
 
 - 4 mood: Storytelling, Curiosity, Strong Hook, Soft Sell
 - Storytelling V2: konteks situasi harian, konflik → turning point → soft product bridge
 - Boleh masukkan situasi cerita sendiri serta pilih jalan cerita (relatable, reflektif, konflik → perubahan, humor ringan)
-- Context-aware mengikut kategori produk (contoh: rak kasut, dapur, gadget, beg, kereta, skincare)
+- Context-aware mengikut kategori produk (termasuk kipas mini / handheld fan, rak kasut, dapur, gadget, beg, kereta, skincare)
+- Tidak lagi guna cerita penat/serabut generik apabila kategori produk tidak dikenali: sebut had dan minta situasi khusus
+- Jika link atau nama produk berubah, input fakta dan situasi lama dikosongkan bagi mengelak cerita tersalah produk
 - Bahasa Melayu, 3 tone, 1–4 komen berurutan
 - Copy setiap post/komen atau semua sekali
 - Edit teks terus dalam preview sebelum copy
@@ -16,7 +18,7 @@ Mobile-first web app untuk menjana post Threads dan komen bersambung daripada **
 - Simpan sehingga 12 hasil terakhir dan draft di **localStorage browser** (tiada akaun / database)
 - Responsive, dark mode, boleh dibuka di Chrome Android, sokongan offline asas
 
-**Penting:** Enjin V2 ialah penjana naratif berasaskan peraturan dan pustaka adegan (bukan model generatif). Ia **bukan model AI** dan tidak memerlukan atau menggunakan OpenAI API. Link pendek Shopee tidak di-scrape; isi nama dan fakta produk secara manual. Tiada auto-publish ke Threads. App ini tidak menjamin pematuhan polisi pemasaran; pengguna perlu menyemak fakta dan mematuhi syarat Shopee Affiliate/Threads.
+**Penting:** Enjin V3 ialah penjana naratif berasaskan peraturan dan pustaka adegan (bukan model generatif). Ia **bukan model AI** dan tidak memerlukan atau menggunakan OpenAI API. Link pendek Shopee tidak di-scrape; isi nama dan fakta produk secara manual. Semak bahawa nama/fakta sama dengan produk dalam link. Untuk penulisan kreatif benar-benar unik, diperlukan model AI melalui backend berasingan. Tiada auto-publish ke Threads. App ini tidak menjamin pematuhan polisi pemasaran; pengguna perlu menyemak fakta dan mematuhi syarat Shopee Affiliate/Threads.
 
 ## Live di GitHub Pages (percuma)
 
