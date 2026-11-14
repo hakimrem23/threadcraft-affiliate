@@ -7,7 +7,7 @@
   <meta name="description" content="Jana copy Threads dan komen bersambung untuk link Shopee Affiliate, terus dari telefon.">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=2">
   <title>ThreadCraft • Affiliate Studio</title>
 </head>
 <body>
@@ -18,15 +18,15 @@
         <div class="logo" aria-hidden="true">✳</div>
         <div><strong>threadcraft<span class="period">.</span></strong><small>THE AFFILIATE STUDIO</small></div>
       </a>
-      <span class="status"><span class="status-dot"></span> FREE · V1</span>
+      <span class="status"><span class="status-dot"></span> FREE · V2</span>
     </header>
 
     <main id="top">
       <section class="hero">
         <div class="eyebrow"><span class="eyebrow-line"></span> UNTUK CONTENT CREATOR</div>
-        <h1>Satu link.<br><em>Banyak cerita.</em></h1>
-        <p>Tukar link Shopee Affiliate kepada post Threads dan komen bersambung. Pilih mood, jana, dan copy–paste.</p>
-        <div class="hero-pills"><span>⚡ Cepat</span><span>✦ 4 gaya penulisan</span><span>◇ Mesra telefon</span></div>
+        <h1>Satu link.<br><em>Cerita yang terasa.</em></h1>
+        <p>Bukan lagi ayat promosi kosong. Bina cerita yang ada situasi, konflik dan penutup natural untuk Threads.</p>
+        <div class="hero-pills"><span>⚡ Cepat</span><span>✦ Cerita bersambung</span><span>◇ Mesra telefon</span></div>
       </section>
 
       <div class="workspace">
@@ -53,6 +53,23 @@
               <input id="audience" name="audience" maxlength="90" placeholder="Contoh: orang duduk rumah sewa">
             </div>
 
+            <div id="story-options" class="story-options">
+              <div class="field">
+                <label for="story-scene">Situasi / masalah harian <span class="optional">Pilihan · bantu cerita jadi lebih hidup</span></label>
+                <textarea id="story-scene" name="storyScene" maxlength="260" rows="3" placeholder="Contoh: Balik kerja, kasut bersepah depan pintu. Nak keluar esok pagi pun cari sebelah lagi."></textarea>
+                <p class="hint">Tulis 1–2 ayat situasi sebenar atau rekaan yang relatable. Kalau kosong, app cuba bina situasi mengikut kategori produk.</p>
+              </div>
+              <div class="field">
+                <label for="story-angle">Jalan cerita</label>
+                <select id="story-angle" name="storyAngle">
+                  <option value="daily">Relatable · cerita harian</option>
+                  <option value="reflective">Emosi · lebih mendalam</option>
+                  <option value="contrast">Konflik → perubahan</option>
+                  <option value="light">Santai · sedikit humor</option>
+                </select>
+              </div>
+            </div>
+
             <div class="subheading"><span>02</span><h3>Pilih mood post</h3></div>
             <fieldset class="mood-grid">
               <legend class="visually-hidden">Mood penulisan</legend>
@@ -75,7 +92,7 @@
             <label class="checkbox-row"><input id="disclose" type="checkbox" checked><span>Letak disclosure affiliate dekat komen link</span></label>
             <div id="error" class="error" role="alert" hidden></div>
             <button id="generate" class="generate-button" type="submit"><span>✦ Jana bebenang</span><span aria-hidden="true">↗</span></button>
-            <p class="below-button">Tanpa langganan API · Tak perlu login · Hasil berdasarkan fakta yang kau isi</p>
+            <p class="below-button">Enjin kreatif V2 · Percuma tanpa API · Semak dan edit sebelum post</p>
           </form>
         </section>
 
@@ -90,7 +107,7 @@
             <div class="result-toolbar"><div><strong id="result-mood">Storytelling</strong><p id="result-count">1 post · 3 komen</p></div><button type="button" id="copy-all" class="outline-button">⧉ Copy semua</button></div>
             <div id="cards" class="thread-cards" aria-live="polite"></div>
             <div class="action-row"><button type="button" class="regenerate-button" id="regenerate">↻ Jana versi lain</button><button type="button" class="ghost-button" id="new-post">＋ Post baru</button></div>
-            <p class="safety-note">Semak fakta & syarat platform sebelum post. Jangan dakwa telah guna produk jika belum. Pendedahan affiliate digalakkan.</p>
+            <p class="safety-note">Enjin ini menulis senario yang menggambarkan situasi, bukan testimoni penggunaan sebenar. Semak fakta dan syarat platform sebelum post. Disclosure affiliate digalakkan.</p>
           </div>
         </section>
       </div>
@@ -103,6 +120,7 @@
     </main>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="./app.js" defer></script>
+  <script src="./story-engine.js?v=2" defer></script>
+  <script src="./app.js?v=2" defer></script>
 </body>
 </html>
