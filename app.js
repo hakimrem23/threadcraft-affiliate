@@ -11,6 +11,7 @@
   let revision = 0;
   let toastTimer;
   let lastConfirmedLink = '';
+  let lastConfirmedProduct = '';
 
   function readStore(key, fallback) {
     try {
@@ -332,6 +333,7 @@
         current = item;
         applyDraft(item.inputs);
         lastConfirmedLink = item.inputs.link || '';
+        lastConfirmedProduct = item.inputs.product || '';
         saveDraft();
         render();
         document.querySelector('.preview').scrollIntoView({behavior:'smooth',block:'start'});
@@ -401,11 +403,22 @@
     const nextLink = normalize($('affiliate-link').value);
     if (lastConfirmedLink && nextLink && nextLink !== lastConfirmedLink) {
       ['product-name','features','audience','story-scene'].forEach(id => { $(id).value = ''; });
+      lastConfirmedProduct = '';
       $('story-angle').value = 'daily';
       setError('Link produk berubah. Isi nama produk dan fakta baharu supaya cerita tidak tersalah produk.');
       showToast('Link baru: isi nama produk semula');
     }
     lastConfirmedLink = nextLink;
+    saveDraft();
+  });
+  $('product-name').addEventListener('change', () => {
+    const nextName = cleanClause($('product-name').value);
+    if (lastConfirmedProduct && nextName && nextName.toLowerCase() !== lastConfirmedProduct.toLowerCase()) {
+      ['features','audience','story-scene'].forEach(id => { $(id).value = ''; });
+      $('story-angle').value = 'daily';
+      showToast('Produk bertukar: situasi lama dibersihkan');
+    }
+    lastConfirmedProduct = nextName;
     saveDraft();
   });
   $('regenerate').addEventListener('click', runGeneration);
@@ -416,6 +429,7 @@
   $('new-post').addEventListener('click', () => {
     form.reset();
     lastConfirmedLink = '';
+    lastConfirmedProduct = '';
     syncStoryFields();
     current = null;
     setError('');
@@ -436,6 +450,7 @@
   if (!Array.isArray(history)) history = [];
   restoreDraft();
   lastConfirmedLink = normalize($('affiliate-link').value);
+  lastConfirmedProduct = cleanClause($('product-name').value);
   syncStoryFields();
   renderHistory();
   render();
