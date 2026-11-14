@@ -186,8 +186,8 @@
 
       if (i === 0 && audience) {
         body += '\n\n' + pick([
-          'Kalau kau ' + audience + ', compare ikut ruang dan keperluan sendiri.',
-          'Untuk ' + audience + ', semak sama ada item ni sesuai dengan penggunaan sebenar.'
+          'Untuk ' + audience + ', compare ikut ruang dan keperluan sendiri.',
+          'Kalau sasaran produk ini ' + audience + ', semak kesesuaian item ikut keperluan sebenar.'
         ], v);
       }
       texts.push(pick(detailTitles, i + v) + '\n\n' + body);
@@ -327,6 +327,8 @@
       button.type = 'button';
       button.addEventListener('click', () => {
         current = item;
+        applyDraft(item.inputs);
+        saveDraft();
         render();
         document.querySelector('.preview').scrollIntoView({behavior:'smooth',block:'start'});
       });
@@ -339,8 +341,7 @@
     saveStore(STORAGE_DRAFT, getInputs());
   }
 
-  function restoreDraft() {
-    const d = readStore(STORAGE_DRAFT, null);
+  function applyDraft(d) {
     if (!d || typeof d !== 'object') return;
     $('affiliate-link').value = d.link || '';
     $('product-name').value = d.product || '';
@@ -369,6 +370,10 @@
     renderHistory();
     render();
     $('output').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  function restoreDraft() {
+    applyDraft(readStore(STORAGE_DRAFT, null));
   }
 
   form.addEventListener('submit', event => { event.preventDefault(); runGeneration(); });
