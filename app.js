@@ -33,6 +33,8 @@
       product: cleanClause(data.get('productName')),
       features: normalize(data.get('features')),
       audience: cleanClause(data.get('audience')),
+      scene: normalize(data.get('storyScene')),
+      angle: data.get('storyAngle') || 'daily',
       mood: data.get('mood') || 'story',
       tone: data.get('tone') || 'casual',
       count: Math.min(4, Math.max(1, Number(data.get('commentCount')) || 3)),
@@ -48,7 +50,7 @@
         return 'Gunakan link penuh bermula dengan https://';
       }
     } catch (_) { return 'Link tak sah. Pastikan link penuh bermula dengan https://'; }
-    if (p.link.length > 2000) return 'Link terlalu panjang. Gunakan link affiliate yang lebih pendek.';
+    if (p.link.length > 350) return 'Link terlalu panjang untuk satu komen Threads. Cuba copy link affiliate pendek dari Shopee.';
     if (p.product.length < 3) return 'Masukkan nama produk yang jelas (sekurang-kurangnya 3 huruf).';
     return '';
   }
@@ -207,6 +209,9 @@
   }
 
   function generate(p, v) {
+    if (window.ThreadCraftEngine && typeof window.ThreadCraftEngine.generate === 'function') {
+      return window.ThreadCraftEngine.generate(p, v);
+    }
     const post = writePost(p, v);
     const replies = writeMiddleReplies(p, v, p.count - 1);
     replies.push(writeLinkReply(p, v));
@@ -347,11 +352,19 @@
     $('product-name').value = d.product || '';
     $('features').value = d.features || '';
     $('audience').value = d.audience || '';
+    $('story-scene').value = d.scene || '';
+    $('story-angle').value = d.angle || 'daily';
     $('comment-count').value = String(d.count || 3);
     $('tone').value = d.tone || 'casual';
     $('disclose').checked = d.disclose !== false;
     const radio = form.querySelector('input[name="mood"][value="' + (labels[d.mood] ? d.mood : 'story') + '"]');
     if (radio) radio.checked = true;
+    syncStoryFields();
+  }
+
+  function syncStoryFields() {
+    const selected = form.querySelector('input[name="mood"]:checked');
+    $('story-options').hidden = !selected || selected.value !== 'story';
   }
 
   function runGeneration() {
@@ -359,7 +372,7 @@
     const error = validate(data);
     setError(error);
     if (error) {
-      document.getElementById(error.includes('Link') || error.includes('link') ? 'affiliate-link' : 'product-name').focus();
+      document.getElementById(error.toLowerCase().includes('link') ? 'affiliate-link' : 'product-name').focus();
       return;
     }
     revision += 1;
@@ -378,7 +391,7 @@
 
   form.addEventListener('submit', event => { event.preventDefault(); runGeneration(); });
   form.addEventListener('input', saveDraft);
-  form.addEventListener('change', saveDraft);
+  form.addEventListener('change', () => { syncStoryFields(); saveDraft(); });
   $('regenerate').addEventListener('click', runGeneration);
   $('copy-all').addEventListener('click', () => {
     if (!current) return;
@@ -386,6 +399,7 @@
   });
   $('new-post').addEventListener('click', () => {
     form.reset();
+    syncStoryFields();
     current = null;
     setError('');
     saveDraft();
@@ -404,6 +418,7 @@
 
   if (!Array.isArray(history)) history = [];
   restoreDraft();
+  syncStoryFields();
   renderHistory();
   render();
 
