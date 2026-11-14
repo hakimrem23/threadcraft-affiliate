@@ -2,10 +2,13 @@
 
 Mobile-first web app untuk menjana post Threads dan komen bersambung daripada **link Shopee Affiliate**.
 
-## Status: V3 — Product relevance safeguards (percuma, tanpa API)
+## Status: V4 — Optional Creative Brief (percuma, tanpa API)
 
 - 4 mood: Storytelling, Curiosity, Strong Hook, Soft Sell
 - Storytelling V2: konteks situasi harian, konflik → turning point → soft product bridge
+- Ruang Idea / relatable angle optional (contoh: MCR + Bukit Jalil + cuaca panas), disimpan dalam draft; jika kosong enjin pilih angle ikut produk
+- Untuk kategori kipas dan konteks concert/MCR, enjin percuma sudah ada draf khusus. **Topik arbitrary lain tidak difahami secara semantik sepenuhnya**; perlu AI berbackend untuk pemahaman bebas
+- Default 1 post + 2 komen, bilangan boleh ditukar
 - Boleh masukkan situasi cerita sendiri serta pilih jalan cerita (relatable, reflektif, konflik → perubahan, humor ringan)
 - Context-aware mengikut kategori produk (termasuk kipas mini / handheld fan, rak kasut, dapur, gadget, beg, kereta, skincare)
 - Tidak lagi guna cerita penat/serabut generik apabila kategori produk tidak dikenali: sebut had dan minta situasi khusus
@@ -18,7 +21,7 @@ Mobile-first web app untuk menjana post Threads dan komen bersambung daripada **
 - Simpan sehingga 12 hasil terakhir dan draft di **localStorage browser** (tiada akaun / database)
 - Responsive, dark mode, boleh dibuka di Chrome Android, sokongan offline asas
 
-**Penting:** Enjin V3 ialah penjana naratif berasaskan peraturan dan pustaka adegan (bukan model generatif). Ia **bukan model AI** dan tidak memerlukan atau menggunakan OpenAI API. Link pendek Shopee tidak di-scrape; isi nama dan fakta produk secara manual. Semak bahawa nama/fakta sama dengan produk dalam link. Untuk penulisan kreatif benar-benar unik, diperlukan model AI melalui backend berasingan. Tiada auto-publish ke Threads. App ini tidak menjamin pematuhan polisi pemasaran; pengguna perlu menyemak fakta dan mematuhi syarat Shopee Affiliate/Threads.
+**Penting:** Enjin V4 ialah penjana naratif berasaskan peraturan dan pustaka adegan (bukan model generatif). Ia **bukan model AI** dan tidak memerlukan atau menggunakan OpenAI API. Link pendek Shopee tidak di-scrape; isi nama dan fakta produk secara manual. Semak bahawa nama/fakta sama dengan produk dalam link. Untuk penulisan kreatif benar-benar unik, diperlukan model AI melalui backend berasingan. Tiada auto-publish ke Threads. App ini tidak menjamin pematuhan polisi pemasaran; pengguna perlu menyemak fakta dan mematuhi syarat Shopee Affiliate/Threads.
 
 ## Live di GitHub Pages (percuma)
 
