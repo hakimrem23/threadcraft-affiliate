@@ -2,10 +2,10 @@
 
 Mobile-first web app untuk menjana post Threads dan komen bersambung daripada **link Shopee Affiliate**.
 
-## Status: V5 — Import kad produk ChatGPT + Copy AI Brief (percuma, tanpa API)
+## Status: V5.1 — Paste kad auto-isi produk (percuma, tanpa API)
 
 - Import kad produk terus dari ChatGPT, dengan format stabil THREADCRAFT-PRODUCT-V1
-- Sekali copy/paste atau butang "Ambil dari clipboard" jika izin clipboard diberikan
+- Paste kad lengkap ke kotak import: sistem mengisi nama produk, ciri, nota dan link secara automatik, tanpa klik Import teks. Butang "Ambil dari clipboard" masih tersedia jika izin clipboard diberikan
 - Kad mengisi nama produk, ciri, nota screenshot dan pautan affiliate Shopee (jika disertakan)
 - Copy brief siap untuk ChatGPT supaya gaya copywriting dalam chat lebih natural daripada generator template
 - Screenshot **tidak dihantar/dimuat naik dalam web app**; pengguna upload screenshot ke ChatGPT terlebih dahulu
@@ -32,7 +32,7 @@ Mobile-first web app untuk menjana post Threads dan komen bersambung daripada **
 
 1. Hantar screenshot produk Shopee kepada ChatGPT (dalam perbualan ini atau lain) dan minta output kad menggunakan format di bawah.
 2. Copy keseluruhan kad sekali sahaja, termasuk baris pembuka dan penutup.
-3. Buka ThreadCraft V5 → **Import produk dari ChatGPT** → **Ambil dari clipboard**. Jika browser tidak beri kebenaran clipboard, paste manual dalam kotak dan tekan **Import teks**.
+3. Buka ThreadCraft V5.1 → **Import produk dari ChatGPT**. Paste keseluruhan kad, dan app terus isi butiran produk secara automatik. Alternatif: tekan **Ambil dari clipboard** jika browser membenarkan. Butang **Import teks** tetap tersedia untuk penggunaan manual.
 4. App akan mengisi nama produk, ciri dan nota screenshot serta link affiliate jika disertakan. Semak semuanya sebelum generate. Idea atau angle kekal optional.
 5. Untuk gaya penulisan benar-benar natural, pilih **Copy brief untuk ChatGPT**, paste ke ChatGPT, kemudian gunakan hasil draf selepas semakan. Generator dalam app masih aturan statik, bukan ChatGPT.
 
