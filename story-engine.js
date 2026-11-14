@@ -240,7 +240,30 @@
       'Kalau rasa berkaitan dengan situasi tadi, boleh semak sendiri dekat sini 👇'
     ];
     const disclosure = p.disclose !== false ? '\n\nPautan affiliate: aku mungkin terima komisen jika kau membeli melalui link ini.' : '';
-    return choose(lines,v) + '\n\n' + p.link + disclosure;
+    const preferred = choose(lines,v) + '\n\n' + p.link + disclosure;
+    if (preferred.length <= 500) return preferred;
+    return 'Link produk 👇\n\n' + p.link + disclosure;
+  }
+
+  function styleTone(text, tone, preserveLink) {
+    if (tone === 'polished') {
+      return text
+        .replace(/\bAku\b/g, 'Saya')
+        .replace(/\baku\b/g, 'saya')
+        .replace(/\bkau\b/g, 'anda')
+        .replace(/\bkorang\b/g, 'anda')
+        .replace(/\bcheckout\b/g, 'buat pesanan')
+        .replace(/\bnak\b/g, 'mahu')
+        .replace(/\bdekat\b/g, 'di')
+        .replace(/\bcheck\b/g, 'semak');
+    }
+    if (tone === 'direct' && !preserveLink) {
+      const paragraphs = text.split('\n\n');
+      if (paragraphs.length > 3) {
+        return [paragraphs[0],paragraphs[2],paragraphs[paragraphs.length-1]].join('\n\n');
+      }
+    }
+    return text;
   }
 
   function generate(p, variant) {
@@ -250,7 +273,11 @@
     const count=Math.min(4, Math.max(1, Number(normalized.count)||3));
     const post = normalized.mood === 'story' ? storyPost(normalized,c,facts,v) : alternativePost(normalized,c,facts,v);
     const middles = normalized.mood === 'story' ? storyReplies(normalized,c,facts,count-1,v) : alternativeReplies(normalized,c,facts,count-1,v);
-    return [crop(post,500),...middles.map(x=>crop(x,500)),crop(linkReply(normalized,c,v),500)];
+    return [
+      crop(styleTone(post, normalized.tone, false), 500),
+      ...middles.map(x => crop(styleTone(x, normalized.tone, false), 500)),
+      styleTone(linkReply(normalized,c,v), normalized.tone, true)
+    ];
   }
   global.ThreadCraftEngine = Object.freeze({generate});
 })(window);
