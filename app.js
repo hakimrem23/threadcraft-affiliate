@@ -10,6 +10,7 @@
   let current = null;
   let revision = 0;
   let toastTimer;
+  let lastConfirmedLink = '';
 
   function readStore(key, fallback) {
     try {
@@ -209,13 +210,10 @@
   }
 
   function generate(p, v) {
-    if (window.ThreadCraftEngine && typeof window.ThreadCraftEngine.generate === 'function') {
-      return window.ThreadCraftEngine.generate(p, v);
+    if (!window.ThreadCraftEngine || typeof window.ThreadCraftEngine.generate !== 'function') {
+      throw new Error('Enjin cerita tidak dimuatkan. Refresh halaman supaya versi terkini digunakan.');
     }
-    const post = writePost(p, v);
-    const replies = writeMiddleReplies(p, v, p.count - 1);
-    replies.push(writeLinkReply(p, v));
-    return [post, ...replies];
+    return window.ThreadCraftEngine.generate(p,v);
   }
 
   function setError(message) {
@@ -333,6 +331,7 @@
       button.addEventListener('click', () => {
         current = item;
         applyDraft(item.inputs);
+        lastConfirmedLink = item.inputs.link || '';
         saveDraft();
         render();
         document.querySelector('.preview').scrollIntoView({behavior:'smooth',block:'start'});
@@ -376,7 +375,13 @@
       return;
     }
     revision += 1;
-    const parts = generate(data, revision);
+    let parts;
+    try {
+      parts = generate(data, revision);
+    } catch (e) {
+      setError(e && e.message ? e.message : 'Ada masalah pada enjin cerita. Refresh halaman dan cuba lagi.');
+      return;
+    }
     current = {id:String(Date.now())+'-'+revision,createdAt:Date.now(),inputs:data,parts};
     saveLatest();
     saveDraft();
@@ -392,6 +397,17 @@
   form.addEventListener('submit', event => { event.preventDefault(); runGeneration(); });
   form.addEventListener('input', saveDraft);
   form.addEventListener('change', () => { syncStoryFields(); saveDraft(); });
+  $('affiliate-link').addEventListener('change', () => {
+    const nextLink = normalize($('affiliate-link').value);
+    if (lastConfirmedLink && nextLink && nextLink !== lastConfirmedLink) {
+      ['product-name','features','audience','story-scene'].forEach(id => { $(id).value = ''; });
+      $('story-angle').value = 'daily';
+      setError('Link produk berubah. Isi nama produk dan fakta baharu supaya cerita tidak tersalah produk.');
+      showToast('Link baru: isi nama produk semula');
+    }
+    lastConfirmedLink = nextLink;
+    saveDraft();
+  });
   $('regenerate').addEventListener('click', runGeneration);
   $('copy-all').addEventListener('click', () => {
     if (!current) return;
@@ -399,6 +415,7 @@
   });
   $('new-post').addEventListener('click', () => {
     form.reset();
+    lastConfirmedLink = '';
     syncStoryFields();
     current = null;
     setError('');
@@ -418,6 +435,7 @@
 
   if (!Array.isArray(history)) history = [];
   restoreDraft();
+  lastConfirmedLink = normalize($('affiliate-link').value);
   syncStoryFields();
   renderHistory();
   render();
