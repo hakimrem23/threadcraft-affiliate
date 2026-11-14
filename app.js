@@ -35,6 +35,7 @@
       product: cleanClause(data.get('productName')),
       features: normalize(data.get('features')),
       audience: cleanClause(data.get('audience')),
+      idea: normalize(data.get('creativeIdea')),
       scene: normalize(data.get('storyScene')),
       angle: data.get('storyAngle') || 'daily',
       mood: data.get('mood') || 'story',
@@ -353,6 +354,7 @@
     $('product-name').value = d.product || '';
     $('features').value = d.features || '';
     $('audience').value = d.audience || '';
+    $('creative-idea').value = d.idea || '';
     $('story-scene').value = d.scene || '';
     $('story-angle').value = d.angle || 'daily';
     $('comment-count').value = String(d.count || 3);
@@ -402,7 +404,7 @@
   $('affiliate-link').addEventListener('change', () => {
     const nextLink = normalize($('affiliate-link').value);
     if (lastConfirmedLink && nextLink && nextLink !== lastConfirmedLink) {
-      ['product-name','features','audience','story-scene'].forEach(id => { $(id).value = ''; });
+      ['product-name','features','audience','story-scene','creative-idea'].forEach(id => { $(id).value = ''; });
       lastConfirmedProduct = '';
       $('story-angle').value = 'daily';
       setError('Link produk berubah. Isi nama produk dan fakta baharu supaya cerita tidak tersalah produk.');
@@ -414,7 +416,7 @@
   $('product-name').addEventListener('change', () => {
     const nextName = cleanClause($('product-name').value);
     if (lastConfirmedProduct && nextName && nextName.toLowerCase() !== lastConfirmedProduct.toLowerCase()) {
-      ['features','audience','story-scene'].forEach(id => { $(id).value = ''; });
+      ['features','audience','story-scene','creative-idea'].forEach(id => { $(id).value = ''; });
       $('story-angle').value = 'daily';
       showToast('Produk bertukar: situasi lama dibersihkan');
     }
