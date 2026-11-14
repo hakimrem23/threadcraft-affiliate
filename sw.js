@@ -1,5 +1,5 @@
-const CACHE = 'threadcraft-static-v4';
-const ASSETS = ['./','./index.html','./styles.css','./app.js','./story-engine.js','./icon.svg','./manifest.webmanifest'];
+const CACHE = 'threadcraft-static-v5';
+const ASSETS = ['./','./index.html','./styles.css','./app.js','./story-engine.js','./product-card.js','./icon.svg','./manifest.webmanifest'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
