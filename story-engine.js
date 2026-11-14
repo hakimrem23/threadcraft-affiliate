@@ -174,9 +174,10 @@
   function storyReplies(p, c, facts, count, v) {
     const out = [];
     const why = [
-      'Yang menarik dalam cerita ni bukan semata-mata barang baru.\n\n' + c.friction + '\n\nBenda kecil yang berulang selalunya paling kita rasa.',
-      'Aku suka tengok masalah dari sudut ni: ' + c.insight + '\n\nTargetnya bukan nak jadi sempurna. Cukup ' + c.desired + '.',
-      'Mungkin ramai tak perasan, tapi ' + c.lens + ' selalu memberi kesan pada hari kita.\n\nSebab tu elok fikir apa yang kita nak mudahkan dahulu.'
+      'Tapi cerita ni sebenarnya bukan pasal satu barang semata-mata.\n\n' + c.friction + '\n\nYang kita nak cuma ruang kecil untuk rasa lega dalam rutin sendiri.',
+      'Bayangkan perkara yang sama berlaku lagi minggu depan.\n\n' + c.friction + '\n\nMasa tu baru nampak kenapa ' + c.desired + ' boleh jadi sesuatu yang bermakna.',
+      'Mungkin orang lain nampak ini sebagai perkara remeh.\n\nTapi bila hidup memang dah sibuk, ' + c.desired + ' terasa macam satu kemenangan kecil.',
+      'Yang buat sesuatu rutin terasa berat selalunya bukan satu masalah besar.\n\n' + c.friction + '\n\nKadang satu perubahan kecil pun cukup buat kita rasa lebih teratur.'
     ];
     const factPart = () => facts.length
       ? 'Dekat maklumat produk, antara ciri yang dinyatakan ialah ' + facts.map(f => '“' + f + '”').join(', ') + '.\n\nCiri ni mungkin relevan untuk ' + c.desired + ', tapi kena semak detail sebenar sebelum checkout.'
