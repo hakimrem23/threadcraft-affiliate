@@ -8,6 +8,98 @@
   const sentence = text => end(normalize(text));
   const crop = (text, limit) => text.length <= limit ? text : text.slice(0, limit - 1).trimEnd().replace(/[,:;\s]+$/,'') + '…';
   const validSeed = v => Number.isFinite(Number(v)) ? Math.floor(Number(v)) : 0;
+
+  const miniFanPattern = /kipas\s*(?:mini|portable|tangan|usb|kecil|lipat|leher|meja|travel|turbo|handheld)|(?:mini|portable|handheld|neck|rechargeable|usb|pocket|turbo|desk)\s*fan/i;
+
+  const miniFanContext = {
+    scene: 'Tengah hari. Berjalan sekejap dari parking ke bangunan pun rasa bahang dekat muka. Orang depan masih beratur dan udara langsung tak bergerak.',
+    friction: 'Bila cuaca panas dan terpaksa menunggu, lima minit pun boleh terasa lama.',
+    insight: 'Cuaca mungkin kita tak boleh kawal. Tapi kita boleh fikir cara kecil untuk rasa lebih selesa ketika bergerak.',
+    desired: 'sedikit aliran udara ketika cuaca panas',
+    lens: 'saiz mudah dibawa, kelajuan angin, bunyi dan ketahanan bateri',
+    check: 'saiz, berat, tetapan kelajuan, bunyi dan tempoh bateri seperti yang dinyatakan penjual',
+    question: 'Kalau perlu bawa sepanjang hari, praktikal ke saiz dan baterinya?'
+  };
+
+  function miniFanStory(p, v) {
+    const moments = [
+      'Tengah hari. Baru keluar dari bangunan, bahang panas terus terasa dekat muka. Dekat depan, masih ada orang beratur. Kawasan berbumbung pun rasa macam tak banyak membantu.',
+      'Bayangkan baru berjalan dari parking terbuka ke kedai. Jarak dekat je, tapi cuaca Malaysia memang tak bagi muka. Sampai depan kaunter, masih kena tunggu giliran.',
+      'Dah sampai tempat menunggu bas. Atap ada, bangku ada, tapi angin? Entah pergi mana. Tengok skrin telefon, bas lambat lagi beberapa minit.',
+      'Kau pernah tak keluar beli barang sekejap, tapi balik-balik rasa macam baru lepas berjalan jauh? Cuaca panas, tempat sesak, nak cari angin pun susah.',
+      'Masa beratur dekat luar, semua orang perlahan-lahan mula cari tempat teduh. Bahang tetap terasa, dan giliran pula tak bergerak.'
+    ];
+    const scene = normalize(p.scene) ? sentence(p.scene) : choose(moments,v);
+    const pivots = [
+      'Dalam situasi macam ni, kita bukan cari benda yang boleh ubah cuaca. Cuma sesuatu yang mungkin bantu rasa lebih selesa sementara menunggu.',
+      'Bukan isu nak hidup mewah pun. Kadang sedikit aliran udara pun terasa berharga bila tak ada pilihan selain tunggu.',
+      'Panas tu mungkin perkara biasa. Tapi ada beza antara terpaksa tahan dengan sekurang-kurangnya ada pilihan untuk rasa sedikit nyaman.',
+      'Tak semua masalah perlukan solusi besar. Kadang kita cuma nak kurangkan rasa rimas bila perlu berada di luar.'
+    ];
+    const bridges = [
+      'Sebab tu aku tengah tengok ' + p.product + '. Persoalannya: praktikal ke untuk bawa hari-hari, atau nampak menarik dalam gambar je? 👇',
+      'Situasi macam ni buat ' + p.product + ' nampak relevan untuk dipertimbangkan. Tapi aku nak tahu dulu sama ada ia betul-betul sesuai dibawa. 👇',
+      'Itulah sebab ' + p.product + ' masuk dalam shortlist. Kalau kecil tapi tak tahan lama, tak membantu juga kan? Sambung bawah 👇',
+      'Jadi bila nampak ' + p.product + ', aku terfikir: sesuai ke untuk situasi tadi? Jom semak sebelum terburu-buru beli 👇'
+    ];
+    const opening = (p.angle === 'reflective') ? 'Kadang benda paling remeh boleh buat kita cepat hilang sabar.\n\n' + scene
+      : (p.angle === 'contrast') ? 'Jarak jalan dekat. Tapi bahang panas boleh buat rasa jauh.\n\n' + scene
+      : (p.angle === 'light') ? 'Cuaca Malaysia ni kadang rasa macam air fryer tanpa bakul. 😅\n\n' + scene
+      : scene;
+    const parts=[opening,choose(pivots,v),choose(bridges,v)];
+    const result=parts.join('\n\n');
+    if(result.length<=500)return result;
+    return [crop(opening,235),crop(choose(pivots,v),110),crop(choose(bridges,v),130)].join('\n\n');
+  }
+
+  function miniFanReplies(p, facts, count, v) {
+    if(count===0)return [];
+    const sceneFollowup=[
+      'Benda ni bukan hanya pasal panas tengah hari. Fikir juga waktu tunggu e-hailing, berjalan dari parking, atau beratur dekat luar.\n\nKalau memang kerap dalam situasi macam tu, barulah aksesori kecil ni nampak ada gunanya.',
+      'Pernah perasan tak, masa cuaca panas orang automatik cari bayang, kipas tangan, atau apa saja yang boleh buat udara bergerak?\n\nItu konteks sebenar ' + p.product + ' — bukan barang wajib untuk semua orang.',
+      'Kalau kita jarang keluar tengah hari, mungkin barang ni tak begitu diperlukan.\n\nTapi kalau selalu ulang-alik dalam panas, idea ada kipas kecil dalam beg memang masuk akal untuk disemak.'
+    ];
+    const specText = facts.length
+      ? 'Daripada ciri yang diberi, produk ini disenaraikan dengan: ' + facts.map(f=>'“'+f+'”').join(', ') + '.\n\nCuma jangan lupa semak butiran sebenar pada listing.'
+      : 'Aku akan bandingkan saiz, berat, tetapan kelajuan, bunyi dan ketahanan bateri yang dinyatakan penjual. Itu lebih penting daripada gambar cantik.';
+    const practical = [
+      'Bayangkan dah beratur agak lama, tapi kipas pula habis bateri. 😅\n\nSebab tu kapasiti bateri dan cara cas antara perkara pertama yang patut disemak sebelum beli.',
+      'Kipas yang senang dibawa kena sesuai dengan beg dan cara kita bergerak. Kalau terlalu berat atau kuat bunyinya, susah juga nak guna dalam situasi tertentu.',
+      'Yang paling penting, jangan terus percaya pada video produk semata-mata.\n\nTengok review sebenar, spesifikasi penjual dan harga akhir. Pilih ikut kegunaan sendiri.'
+    ];
+    const factLine=specText+'\n\nKalau tujuan kau untuk kegunaan luar, fikir juga bagaimana nak bawa atau simpan produk ni.';
+    if(count===1)return [factLine];
+    if(count===2)return [choose(sceneFollowup,v),factLine];
+    if(count===3)return [choose(sceneFollowup,v),factLine,choose(practical,v)];
+    return [choose(sceneFollowup,v),factLine,choose(practical,v), 'Kisahnya bermula dengan panas dan menunggu tadi. Tapi keputusan beli tetap mudah: adakah ' + p.product + ' berbaloi untuk rutin kau?\n\nSemak review dan maklumat bateri sebelum checkout.'];
+  }
+
+  function fallbackStory(p, v) {
+    const story = normalize(p.scene);
+    if (story) {
+      return crop(
+        'Bayangkan situasi ni.\n\n'+sentence(story)+
+        '\n\nBila berdepan keadaan macam ni, yang kita cari selalunya pilihan yang betul-betul sesuai — bukan sekadar ikut trend.'+
+        '\n\nAku sedang tengok '+p.product+' sebagai satu pilihan. Tapi kena semak fakta dan kegunaan dia dulu. Sambung 👇', 500
+      );
+    }
+    return crop(
+      'Kalau tengah cari '+p.product+', satu soalan patut datang dulu: kita nak gunakannya untuk selesaikan masalah apa?\n\n'+
+      'Aku tak nak reka cerita atau pengalaman yang tak berkaitan dengan produk ni. Jadi aku kumpulkan perkara yang patut disemak sebelum beli. 👇',
+      500
+    );
+  }
+
+  function fallbackReplies(p, facts, count) {
+    const first = facts.length
+      ? 'Daripada maklumat yang dimasukkan, ciri produk ialah: '+facts.map(f=>'“'+f+'”').join(', ')+'.\n\nSemak semula pada listing sebelum membuat keputusan.'
+      : 'Tanpa situasi produk yang jelas, lebih baik semak maklumat sebenar: fungsi, bahan, saiz, kegunaan dan review pembeli.';
+    return Array.from({length:count},(_,i)=>i===0?first:(
+      i%2 ? 'Kalau kau nak story yang betul-betul kena, isi ruangan “Situasi / masalah harian”. Contohnya: bila, di mana dan kenapa produk ni relevan.'
+        : 'Jangan beli sebab cerita atau gambar sahaja. Bandingkan kegunaan, spesifikasi dan harga akhir.'
+    ));
+  }
+
   const contexts = [
     {
       test: /rak kasut|shoe rack|kasut.*(rack|rak)|almari kasut/i,
@@ -121,6 +213,7 @@
   };
 
   function contextOf(p) {
+    if (miniFanPattern.test(p.product || '')) return miniFanContext;
     return contexts.find(c => c.test.test(p.product || '')) || fallback;
   }
 
@@ -272,13 +365,19 @@
     const normalized = Object.assign({ mood:'story', tone:'casual', angle:'daily', scene:'', features:'', product:'', audience:'', count:3, disclose:true }, p);
     const c = contextOf(normalized), facts=factsOf(normalized.features);
     const count=Math.min(4, Math.max(1, Number(normalized.count)||3));
-    const post = normalized.mood === 'story' ? storyPost(normalized,c,facts,v) : alternativePost(normalized,c,facts,v);
-    const middles = normalized.mood === 'story' ? storyReplies(normalized,c,facts,count-1,v) : alternativeReplies(normalized,c,facts,count-1,v);
+    const isFan = miniFanPattern.test(normalized.product);
+    const isUnknown = c === fallback;
+    const post = normalized.mood === 'story'
+      ? (isFan ? miniFanStory(normalized,v) : isUnknown ? fallbackStory(normalized,v) : storyPost(normalized,c,facts,v))
+      : alternativePost(normalized,c,facts,v);
+    const middles = normalized.mood === 'story'
+      ? (isFan ? miniFanReplies(normalized,facts,count-1,v) : isUnknown ? fallbackReplies(normalized,facts,count-1) : storyReplies(normalized,c,facts,count-1,v))
+      : alternativeReplies(normalized,c,facts,count-1,v);
     return [
       crop(styleTone(post, normalized.tone, false), 500),
       ...middles.map(x => crop(styleTone(x, normalized.tone, false), 500)),
       styleTone(linkReply(normalized,c,v), normalized.tone, true)
     ];
   }
-  global.ThreadCraftEngine = Object.freeze({generate});
+  global.ThreadCraftEngine = Object.freeze({generate, recognizesProduct: product => miniFanPattern.test(product || '') || contexts.some(c => c.test.test(product || ''))});
 })(window);
