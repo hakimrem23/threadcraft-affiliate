@@ -360,12 +360,70 @@
     return text;
   }
 
+
+  // Curated example of how a user-provided angle should take priority over generic templates.
+  // This is not AI semantic understanding. Keep other unsupported angles explicit.
+  function concertFanDraft(p, count, variant) {
+    const v=validSeed(variant);
+    const mainPosts=[
+      'yang pergi MCR bukit jalil nanti korang plan sampai pukul berapa eh\n\nkalau datang awal sangat, tunggu lama pulak kat luar\n\ntapi kalau gerak lambat, bab traffic tu aku tak nak bayang HAHAHA',
+      'aku rasa persiapan nak pergi MCR ni bukan setakat pilih baju je 😭\n\nparking bukit jalil, nak gerak pukul berapa, nak jumpa kawan kat mana\n\nbtw yang datang awal tu korang plan lepak mana sementara tunggu?',
+      'yang pergi MCR nanti korang ada simpan lagi tshirt band zaman sekolah tak\n\naku curious kalau masih ada yang pakai balik HAHAHA\n\nbtw plan nak sampai bukit jalil pukul berapa?',
+      'aku tengah fikir yang pergi MCR nanti mesti ada geng datang awal gila sebab excited 😭\n\nkorang kalau kena tunggu lama kat luar tu dah plan ke nak buat apa?',
+      'yang pergi MCR bukit jalil ni korang dah arrange transport ke belum\n\naku rasa part balik lepas concert tu pun kena fikir awal sikit hahaha\n\nsiapa plan datang awal?'
+    ];
+    const weather=[
+      'part tunggu luar tu aku terfikir jugak. kalau panas memang cari tempat teduh la jawabnya 😭\n\nnovember pun bukan maksudnya cuaca mesti sejuk.',
+      'aku curious kalau ramai datang awal, berapa lama orang nak tunggu kat luar\n\nkalau panas, memang air dengan tempat teduh tu kena fikir sekali.',
+      'dengan cuaca malaysia ni aku rasa siapa yang plan nak datang awal kena fikir pasal tunggu kat luar jugak.\n\njangan sampai penat sebelum concert mula 😭',
+      'kalau kena beratur kat luar, panas tu yang buat aku fikir dua kali nak datang terlalu awal 😂'
+    ];
+    const fan=[
+      'btw kipas mini macam worth consider kalau kena menunggu luar lama\n\ncuma aku tak pasti boleh bawak masuk venue ke tak. ada siapa dah check rules organiser?',
+      'kipas mini mungkin berguna jugak waktu beratur kat luar nanti\n\ntapi syarat barang yang boleh masuk tu kena check dulu. tak nak nanti sangkut dekat gate 😭',
+      'aku tengah fikir kipas mini ni relevan tak untuk yang datang awal\n\nkalau dibenarkan masuk okay la. kalau tak, kena plan lain. siapa dah check rules?'
+    ];
+    const optional=[
+      'yang paling penting jangan buat andaian semua barang boleh bawa masuk. check info daripada organiser dulu.\n\naku tak nak suggest barang yang last-last kena tinggal dekat luar.',
+      'aku rasa ikut masing-masing jugak. yang datang dekat waktu masuk mungkin lain, yang nak beratur awal kena plan lebih sikit.',
+      'btw kalau ada yang dah jumpa senarai barang boleh masuk, share la. senang semua orang nak prepare.'
+    ];
+    const link='kalau tengah survey kipas mini untuk tunggu kat luar, ni link produk yang boleh compare\n\n'+p.link+
+      (p.disclose!==false?'\n\naffiliate link btw. kalau beli melalui link ni aku mungkin dapat komisen.':'');
+    let comments;
+    if(count===1) comments=['kipas mini ni nampak boleh consider kalau menunggu luar lama, cuma check rules organiser dulu ya.\n\n'+link];
+    else if(count===2) comments=[choose(fan,v),link];
+    else if(count===3) comments=[choose(weather,v),choose(fan,v),link];
+    else comments=[choose(weather,v),choose(fan,v),choose(optional,v),link];
+    const post=choose(mainPosts,v);
+    return [post,...comments];
+  }
+
+  function unsupportedIdeaDraft(p, c, facts, count, v) {
+    // Acknowledge the brief, without pretending that templates understand any arbitrary topic.
+    // The user's specific angle is preserved verbatim in the initial post as a rough draft.
+    const raw=normalize(p.idea).slice(0,140).replace(/[.!?;,\s]+$/g,'');
+    const post=crop('aku tengah terfikir nak kaitkan '+p.product+' dengan '+raw+'\n\ntapi nak tengok macam mana benda ni boleh relate dengan orang yang betul-betul perlukan dia. korang rasa?',500);
+    const mids=Array.from({length:count-1},(_,i)=>{
+      if(i===0) return facts.length?'antara info produk yang ada: '+facts.map(x=>'“'+x+'”').join(', ')+'.\n\ntapi kena semak semula pada listing.':'aku rasa untuk angle ni, kena tengok konteks sebenar dulu. tak semua barang sesuai dengan setiap situasi.';
+      return 'kalau ada yang familiar dengan situasi tu, apa benda korang biasanya consider sebelum beli?';
+    });
+    return [post,...mids,linkReply(p,c,v)];
+  }
+
   function generate(p, variant) {
     const v = validSeed(variant);
-    const normalized = Object.assign({ mood:'story', tone:'casual', angle:'daily', scene:'', features:'', product:'', audience:'', count:3, disclose:true }, p);
+    const normalized = Object.assign({ mood:'story', tone:'casual', angle:'daily', scene:'', idea:'', features:'', product:'', audience:'', count:3, disclose:true }, p);
     const c = contextOf(normalized), facts=factsOf(normalized.features);
     const count=Math.min(4, Math.max(1, Number(normalized.count)||3));
     const isFan = miniFanPattern.test(normalized.product);
+    const idea = normalize(normalized.idea);
+    if (idea && isFan && /\bmcr\b|my chemical romance|concert|konsert|\bgig\b/i.test(idea)) {
+      return concertFanDraft(normalized,count,v).map((part,index)=>crop(styleTone(part,normalized.tone,index===count),500));
+    }
+    if (idea && !normalize(normalized.scene)) {
+      return unsupportedIdeaDraft(normalized,c,facts,count,v).map((part,index)=>crop(styleTone(part,normalized.tone,index===count),500));
+    }
     const isUnknown = c === fallback;
     const post = normalized.mood === 'story'
       ? (isFan ? miniFanStory(normalized,v) : isUnknown ? fallbackStory(normalized,v) : storyPost(normalized,c,facts,v))
