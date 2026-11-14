@@ -34,6 +34,7 @@
       link: normalize(data.get('affiliateLink')),
       product: cleanClause(data.get('productName')),
       features: normalize(data.get('features')),
+      snapshot: normalize(data.get('productSnapshot')),
       audience: cleanClause(data.get('audience')),
       idea: normalize(data.get('creativeIdea')),
       scene: normalize(data.get('storyScene')),
@@ -353,6 +354,7 @@
     $('affiliate-link').value = d.link || '';
     $('product-name').value = d.product || '';
     $('features').value = d.features || '';
+    $('product-snapshot').value = d.snapshot || '';
     $('audience').value = d.audience || '';
     $('creative-idea').value = d.idea || '';
     $('story-scene').value = d.scene || '';
@@ -398,13 +400,102 @@
     applyDraft(readStore(STORAGE_DRAFT, null));
   }
 
+
+  function importCard(raw) {
+    const status=$('import-status');
+    status.textContent='';
+    status.classList.remove('is-error');
+    let card;
+    try {
+      if(!window.ThreadCraftProductCard || typeof window.ThreadCraftProductCard.parse !== 'function') {
+        throw new Error('Sistem import belum siap. Refresh app dan cuba lagi.');
+      }
+      card=window.ThreadCraftProductCard.parse(raw);
+      const oldName=cleanClause($('product-name').value);
+      const oldLink=normalize($('affiliate-link').value);
+      const differentName=oldName && oldName.toLowerCase() !== card.name.toLowerCase();
+      const differentLink=card.url && oldLink && oldLink!==card.url;
+      if(differentLink && !window.confirm('Link dalam kad lain daripada link dalam app. Gantikan link lama dengan link daripada kad ChatGPT?')) {
+        status.textContent='Import dibatalkan. Link asal kekal.';
+        return;
+      }
+      if(differentName || differentLink) {
+        ['audience','story-scene','creative-idea'].forEach(id=>{$(id).value='';});
+        $('story-angle').value='daily';
+        status.textContent='Nama dan ciri produk diimport. Idea lama dibersihkan sebab produk berubah.';
+      } else {
+        status.textContent='Berjaya import nama, ciri dan nota. Idea kau dikekalkan.';
+      }
+      $('product-name').value=card.name;
+      $('features').value=card.features;
+      $('product-snapshot').value=card.snapshot;
+      if(card.url) $('affiliate-link').value=card.url;
+      lastConfirmedLink=normalize($('affiliate-link').value);
+      lastConfirmedProduct=cleanClause($('product-name').value);
+      $('product-card-input').value='';
+      setError('');
+      saveDraft();
+      showToast('✓ Maklumat produk berjaya diimport');
+      $('product-name').scrollIntoView({behavior:'smooth',block:'center'});
+    } catch (err) {
+      status.classList.add('is-error');
+      status.textContent=err && err.message ? err.message : 'Import gagal. Semak format kad produk.';
+    }
+  }
+
+  function makeChatGPTBrief(p) {
+    const details = p.features || 'Tiada fakta produk disahkan pada input.';
+    const context = p.idea
+      ? 'ANGLE / IDEA DARIPADA PEMILIK AKAUN (utamakan): '+p.idea
+      : 'TIADA IDEA DIBERI: pilih sendiri satu pemerhatian atau situasi REALISTIK yang berkaitan fungsi produk. Jangan ulang cerita generik.';
+    const scene = p.scene ? 'SITUASI KHUSUS DARIPADA PEMILIK: '+p.scene : '';
+    const moodLabels={story:'Storytelling santai',curious:'Curiosity',hook:'Spontaneous hook',soft:'Soft sell'};
+    return [
+      'TUGAS: Tulis satu Threads post + '+p.count+' komen bersambung dalam suara lelaki millennial Malaysia (BM campur English semula jadi).',
+      'PRODUK: '+p.product,
+      'LINK AFFILIATE (letak pada komen TERAKHIR sahaja): '+p.link,
+      'MAKLUMAT PRODUK YANG DIBERI: '+details,
+      p.snapshot ? 'NOTA SCREENSHOT (harga, rating dan dakwaan mungkin berubah; jangan anggap diuji atau disahkan): '+p.snapshot : '',
+      p.audience ? 'SASARAN PEMBACA: '+p.audience : '',
+      context,
+      scene,
+      'MOOD: '+(moodLabels[p.mood]||'Santai')+'; TONE: '+p.tone+'.',
+      'WRITING DNA (penting): Tulis seperti lelaki Malaysia yang tiba-tiba terfikir nak post dekat Threads. BM santai, English bila memang natural. Ayat ringkas, spontan, sedikit imperfect, ada observation yang orang terus faham. Humor kena tepat pada situasi, bukan punchline dipaksa. Jangan tulis macam skrip, iklan, karangan, motivasi atau salesman.',
+      'HOOK: fokus pada benda yang memang relatable untuk sasaran yang dinyatakan. Post UTAMA mesti seronok dibaca walaupun tanpa link atau produk. Jangan mention produk dalam post utama kecuali idea spesifik memerlukannya.',
+      'KOMEN: sambung perbualan dengan natural. Sebut produk bila benar-benar relevan; final komen ada link dan disclosure jelas bahawa ini affiliate link dan mungkin terima komisen. Jangan paksa CTA, tak wajib ada cliffhanger.',
+      'LARANGAN: jangan buat lawak stereotaip yang tak kena (contoh hoodie emo, sakit lutut semata-mata sebab umur, makeup tanpa konteks); jangan explain punchline; elakkan ayat seperti "baru teringat umur sebenar", "kadang perubahan kecil", "cerita ni bukan pasal barang". Jangan claim penulis pernah guna/beli produk atau hadir ke concert jika tiada maklumat. Jangan reka spesifikasi, performance, diskaun, testimonial atau polisi venue. Dakwaan dalam screenshot hanya dakwaan penjual. Tiada keperluan untuk nampak clever.',
+      'SENTUHAN AKHIR: semak setiap ayat, buang yang terlalu kemas/robotik dan yang tak relevan. Pastikan post ada soul dan humor sederhana, tanpa mengada-ngada.',
+      'OUTPUT: hanya POST UTAMA diikuti KOMEN 1 hingga KOMEN '+p.count+'. Tiada explanation.'
+    ].filter(Boolean).join('\n\n');
+  }
+
   form.addEventListener('submit', event => { event.preventDefault(); runGeneration(); });
   form.addEventListener('input', saveDraft);
   form.addEventListener('change', () => { syncStoryFields(); saveDraft(); });
+  $('import-product').addEventListener('click', () => importCard($('product-card-input').value));
+  $('import-clipboard').addEventListener('click', async () => {
+    try {
+      if(!navigator.clipboard || !navigator.clipboard.readText) throw new Error('Tak boleh baca clipboard pada browser ni. Paste manual dalam ruangan kad kemudian tekan Import teks.');
+      const pasted=await navigator.clipboard.readText();
+      $('product-card-input').value=pasted;
+      importCard(pasted);
+    } catch(err) {
+      const status=$('import-status');
+      status.classList.add('is-error');
+      status.textContent='Clipboard tak dapat dibaca. Tekan lama dalam kotak kad, pilih Paste, kemudian tekan Import teks.';
+    }
+  });
+  $('copy-ai-brief').addEventListener('click', () => {
+    const p=getInputs();
+    const err=validate(p);
+    setError(err);
+    if(err){showToast('Lengkapkan link dan nama produk dahulu'); return;}
+    copy(makeChatGPTBrief(p));
+  });
   $('affiliate-link').addEventListener('change', () => {
     const nextLink = normalize($('affiliate-link').value);
     if (lastConfirmedLink && nextLink && nextLink !== lastConfirmedLink) {
-      ['product-name','features','audience','story-scene','creative-idea'].forEach(id => { $(id).value = ''; });
+      ['product-name','features','product-snapshot','audience','story-scene','creative-idea'].forEach(id => { $(id).value = ''; });
       lastConfirmedProduct = '';
       $('story-angle').value = 'daily';
       setError('Link produk berubah. Isi nama produk dan fakta baharu supaya cerita tidak tersalah produk.');
@@ -416,7 +507,7 @@
   $('product-name').addEventListener('change', () => {
     const nextName = cleanClause($('product-name').value);
     if (lastConfirmedProduct && nextName && nextName.toLowerCase() !== lastConfirmedProduct.toLowerCase()) {
-      ['features','audience','story-scene','creative-idea'].forEach(id => { $(id).value = ''; });
+      ['features','product-snapshot','audience','story-scene','creative-idea'].forEach(id => { $(id).value = ''; });
       $('story-angle').value = 'daily';
       showToast('Produk bertukar: situasi lama dibersihkan');
     }
