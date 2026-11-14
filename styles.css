@@ -141,6 +141,74 @@ footer span:first-child { color:#c7e4a7;font-weight:800 }
 .story-options textarea { min-height:94px; }
 .story-options .hint { color:#b3c3b0; }
 
+
+/* V5: one-paste ChatGPT product card workflow */
+.import-panel {
+  border:1px solid #526d53;
+  background:linear-gradient(145deg,#203529,#141f28);
+  border-radius:16px;
+  margin:1px 0 24px;
+  overflow:hidden;
+}
+.import-panel summary {
+  cursor:pointer;
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  padding:16px;
+  font-size:13px;
+  font-weight:800;
+  color:#d7fac6;
+  list-style-position:inside;
+}
+.import-panel summary small {
+  font-weight:500;
+  color:#b0c1b1;
+  font-size:11px;
+  padding-left:14px;
+  line-height:1.5;
+}
+.import-panel[open] summary { border-bottom:1px solid #435749; }
+.import-body { padding:16px 14px; }
+.import-body>p { color:#adbea9;font-size:11px;line-height:1.7;margin:0 0 14px; }
+.import-body>label { display:block;color:#e7f4e3;font-weight:800;margin-bottom:9px;font-size:12px; }
+#import-status:not(:empty) { margin:12px 0 0; color:#c9f9ad; font-size:11px; line-height:1.55; }
+#import-status.is-error { color:#ffc3c3; }
+#product-card-input {
+  font-family:ui-monospace,'SFMono-Regular',Consolas,monospace;
+  min-height:128px;
+  font-size:11px;
+  line-height:1.5;
+}
+.import-actions { display:flex;flex-wrap:wrap;gap:8px;margin-top:11px; }
+.import-actions>* { flex:1;min-width:125px; }
+.import-primary {
+  background:#c6fc65;
+  color:#182514;
+  border:1px solid #c6fc65;
+  border-radius:10px;
+  padding:11px;
+  font-weight:800;
+  font-size:11px;
+}
+.ai-brief-button {
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  text-align:left;
+  border:1px solid #6f8d65;
+  color:#d3fac2;
+  background:#233429;
+  border-radius:12px;
+  padding:15px 17px;
+  font-weight:800;
+  margin:2px 0 0;
+  font-size:13px;
+}
+.ai-brief-button:hover { background:#2b4030; }
+.ai-helper { margin:9px 0 19px !important; }
+
 @media(max-width:840px) {
   .workspace { grid-template-columns:1fr }
   .hero { padding:43px 0 32px }
