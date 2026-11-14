@@ -7,7 +7,7 @@
   <meta name="description" content="Jana copy Threads dan komen bersambung untuk link Shopee Affiliate, terus dari telefon.">
   <link rel="icon" href="./icon.svg" type="image/svg+xml">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="stylesheet" href="./styles.css?v=5">
+  <link rel="stylesheet" href="./styles.css?v=5.1">
   <title>ThreadCraft • Affiliate Studio</title>
 </head>
 <body>
@@ -18,7 +18,7 @@
         <div class="logo" aria-hidden="true">✳</div>
         <div><strong>threadcraft<span class="period">.</span></strong><small>THE AFFILIATE STUDIO</small></div>
       </a>
-      <span class="status"><span class="status-dot"></span> FREE · V5</span>
+      <span class="status"><span class="status-dot"></span> FREE · V5.1</span>
     </header>
 
     <main id="top">
@@ -36,8 +36,8 @@
             <details class="import-panel" id="import-panel" open>
               <summary><span>📋 Import produk dari ChatGPT</span><small>Screenshot dekat ChatGPT → copy sekali → paste di sini</small></summary>
               <div class="import-body">
-                <p>Hantar screenshot Shopee dekat ChatGPT dan minta <strong>kad THREADCRAFT-PRODUCT-V1</strong>. Copy semua baris kad, kemudian import. App ini tak perlukan API atau akses gambar.</p>
-                <label for="product-card-input">Kad produk (paste satu kali)</label>
+                <p>Hantar screenshot Shopee dekat ChatGPT dan minta <strong>kad THREADCRAFT-PRODUCT-V1</strong>. Copy semua baris kad, paste di kotak bawah — nama, ciri, nota dan link akan terisi automatik. App ini tak perlukan API atau akses gambar.</p>
+                <label for="product-card-input">Kad produk (paste terus auto-isi)</label>
                 <textarea id="product-card-input" rows="5" maxlength="6000" spellcheck="false" placeholder="THREADCRAFT-PRODUCT-V1&#10;NAME: ...&#10;FEATURES: ...&#10;SELLER_CLAIMS: ...&#10;SNAPSHOT: ...&#10;AFFILIATE_URL: ...&#10;END-THREADCRAFT-PRODUCT"></textarea>
                 <div class="import-actions">
                   <button id="import-clipboard" type="button" class="import-primary">⧉ Ambil dari clipboard</button>
@@ -53,7 +53,7 @@
               <p class="hint">Link asal kekal pada komen terakhir. App ini tak boleh kenal pasti produk hanya daripada link Shopee.</p>
             </div>
             <div class="field">
-              <label for="product-name">Nama produk <span class="required">*</span></label>
+              <label for="product-name">Nama produk <span class="required">*</span> <span class="optional">Auto-isi daripada kad · masih boleh edit</span></label>
               <input id="product-name" name="productName" maxlength="110" placeholder="Contoh: Rak kasut 4 tingkat" required>
               <p class="hint">⚠ Pastikan nama produk sama dengan produk dalam link. Contoh: “Kipas mini USB”, bukan nama produk lama.</p>
             </div>
@@ -147,8 +147,8 @@
     </main>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="./product-card.js?v=5" defer></script>
-  <script src="./story-engine.js?v=5" defer></script>
-  <script src="./app.js?v=5" defer></script>
+  <script src="./product-card.js?v=5.1" defer></script>
+  <script src="./story-engine.js?v=5.1" defer></script>
+  <script src="./app.js?v=5.1" defer></script>
 </body>
 </html>
