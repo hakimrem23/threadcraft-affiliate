@@ -118,6 +118,29 @@ footer span:first-child { color:#c7e4a7;font-weight:800 }
 .toast.show { opacity:1;transform:translate(-50%,0) }
 .visually-hidden { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0 }
 [hidden] { display:none !important }
+
+/* V2 storytelling controls */
+.story-options {
+  background:linear-gradient(145deg,#243122,#171e24);
+  border:1px solid #4e6745;
+  border-radius:16px;
+  padding:16px 14px 2px;
+  margin:0 0 20px;
+  box-shadow:inset 0 1px 0 #b4f08a15;
+}
+.story-options:before {
+  content:"✦ BINA CERITA YANG ADA DEPTH";
+  color:#c8f5a5;
+  display:block;
+  letter-spacing:1.1px;
+  font-size:10px;
+  font-weight:800;
+  margin:0 0 14px;
+}
+.story-options .field:last-child { margin-bottom:13px; }
+.story-options textarea { min-height:94px; }
+.story-options .hint { color:#b3c3b0; }
+
 @media(max-width:840px) {
   .workspace { grid-template-columns:1fr }
   .hero { padding:43px 0 32px }
